@@ -30,9 +30,19 @@ function isIndexInBounds(direction, index) {
         case Direction.DOWN:
             return index < direction.boundary
         case Direction.LEFT:
-            return index % width !== direction.boundary
+            return index % width !== direction.boundary    
     }
+}
 
+function didSelfHit() {
+    for (let i = 0; i < snakeTail.length; i++) {
+        if (currentSnakeIndex == snakeTail[i]) {
+            clearInterval(snakeId)
+            lose.textContent = "GAME OVER"
+            isDisabled = true;
+        }
+
+    }
 }
 
 for (let i = 0; i < 450; i++) {
@@ -115,6 +125,7 @@ function moveSnake(direction) {
             squares[snakeEnd].classList.remove("snake")
             currentSnakeIndex += direction.magnitude
             squares[currentSnakeIndex].classList.add("snake")
+            didSelfHit();
         }
         //when you see one thing that is different, that is the paramater.
 
@@ -152,7 +163,6 @@ function flip() {
 
 
 function grow() {
-
     snakeTail.unshift(currentSnakeIndex)
     squares[currentSnakeIndex].classList.add("snake")
     console.log(snakeTail)
