@@ -172,9 +172,14 @@ function grow() {
 
 function randomFoodSquare() {
     randomFoodIndex = Math.floor(Math.random() * squares.length)
-    squares[randomFoodIndex].classList.add("food");
-    console.log(`food index is ${randomFoodIndex}`)
-    state = "food"
+    if (!squares[randomFoodIndex].classList.contains("snake")) {
+        squares[randomFoodIndex].classList.add("food");
+        console.log(`food index is ${randomFoodIndex}`)
+        state = "food"
+    } else {
+        randomFoodSquare();
+    }
+
 
 }
 
