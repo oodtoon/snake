@@ -4,6 +4,7 @@ const lose = document.querySelector(".lose")
 let currentSnakeIndex = 225
 width = 30
 let state = "noFood"
+let size = "noGrow"
 let snakeId
 let randomFoodIndex
 let score = 0
@@ -30,7 +31,7 @@ function isIndexInBounds(direction, index) {
         case Direction.DOWN:
             return index < direction.boundary
         case Direction.LEFT:
-            return index % width !== direction.boundary    
+            return index % width !== direction.boundary
     }
 }
 
@@ -112,6 +113,16 @@ function keydownHandler(e) {
 
 }
 
+/* can do this to avoid writing enter line squares[currentindex].classlist.remove/add/contain
+
+function add(index, className) {
+    squares[index].classList.add(className)
+}
+
+function remove(index) {
+
+}*/
+
 function moveSnake(direction) {
     if (isIndexInBounds(direction, currentSnakeIndex)) {
         if (snakeTail.length === 0) {
@@ -119,17 +130,25 @@ function moveSnake(direction) {
             currentSnakeIndex += direction.magnitude
             squares[currentSnakeIndex].classList.add("snake")
         } else {
-            snakeTail.unshift(currentSnakeIndex)
+            if (size === "noGrow") {
+                snakeTail.unshift(currentSnakeIndex)
+                let snakeEnd = snakeTail.pop()
+                squares[snakeEnd].classList.remove("snake")
+                currentSnakeIndex += direction.magnitude
+                squares[currentSnakeIndex].classList.add("snake")
+            } else {
+                currentSnakeIndex += direction.magnitude
+                squares[currentSnakeIndex].classList.add("snake")
+                size = "noGrow"
+            }
 
-            let snakeEnd = snakeTail.pop()
-            squares[snakeEnd].classList.remove("snake")
-            currentSnakeIndex += direction.magnitude
-            squares[currentSnakeIndex].classList.add("snake")
             didSelfHit();
         }
         //when you see one thing that is different, that is the paramater.
+        if (squares[currentSnakeIndex].classList.contains("food")) {
+            eat();
+        }
 
-        eat();
     } else {
         clearInterval(snakeId)
         lose.textContent = "GAME OVER"
@@ -140,19 +159,19 @@ function moveSnake(direction) {
 
 }
 
+//when eat occurs, do not remove classlist snake from last index in snake
+//check eat because I am always removing the previous piece
+
 function eat() {
-    if (squares[currentSnakeIndex].classList.contains("food")) {
-        squares[randomFoodIndex].classList.remove("food")
-        squares[currentSnakeIndex].classList.add("eat")
-        setInterval(flip, 180)
-        score++;
-        displayScore.textContent = score;
-        state = "noFood";
-        randomFoodSquare();
-        grow();
-
-
-    }
+    squares[randomFoodIndex].classList.remove("food")
+    squares[currentSnakeIndex].classList.add("eat")
+    setInterval(flip, 180)
+    score++;
+    displayScore.textContent = score;
+    state = "noFood";
+    size = "grow"
+    randomFoodSquare();
+    grow();
 
 }
 
