@@ -1,0 +1,15 @@
+{% extends 'snake.html' %}
+
+{% block head %}
+<head>Submit User Name</head>
+{% endblock %}
+
+{% block body %}
+<h1>Enter a 3 Character Username!</h1>
+<div class="form">
+    <form action="/submit" method="POST">
+        <input type="text" name="username" id="username">
+        <input type="submit" value="Add User">
+    </form>
+</div>
+{% endblock %}

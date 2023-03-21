@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+
+{% block body %}
+
+<body>
+
+    <section class="center">
+        <h1>You're a snake! Act like it! EAT!</h1>
+        <h3>Use the arrow keys to move</h3>
+        <h3>Score: <div class="score"></div>
+        </h3>
+        <h2 class="lose"></h2>
+        <form class="inline-block hide" id="btns" name="form" action="/" method="POST">
+            <input type="text" name="score" hidden>
+            <button id="submit" type="submit">Submit Score</button>
+            <button type="button" id="restart">Restart</button>
+        </form>
+
+    </section>
+    <div class="grid"></div>
+
+
+
+
+
+    <script src="{{ url_for('static', filename='js/snake.js') }}"></script>
+</body>
+{% endblock %}

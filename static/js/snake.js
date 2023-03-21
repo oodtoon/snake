@@ -1,6 +1,11 @@
+console.log("hello, World!")
+
 const grid = document.querySelector(".grid");
 const displayScore = document.querySelector(".score")
 const lose = document.querySelector(".lose")
+const btns = document.querySelector("#btns")
+const restart = document.querySelector("#restart");
+const scoreElem = document.querySelector("input[name='score']")
 let currentSnakeIndex = 225
 width = 30
 let state = "noFood"
@@ -35,12 +40,40 @@ function isIndexInBounds(direction, index) {
     }
 }
 
+function displayBtns() {
+    btns.classList.remove("hide")
+}
+
+function gameOver(score) {
+    clearInterval(snakeId)
+    lose.textContent = "GAME OVER"
+    displayBtns();
+    isDisabled = true;
+    scoreElem.value = score
+}
+
+restart.addEventListener("click", function () {
+    currentSnakeIndex = 225
+    state = "noFood"
+    size = "noGrow"
+    score = 0
+    isDisabled = false;
+    left = false;
+    right = false;
+    up = false;
+    down = false;
+    snakeTail.splice(0, snakeTail.length)
+    squares[randomFoodIndex].classList.remove("food")
+    for (let i = 0; i < squares.length; i++) {
+        squares[i].classList.remove("snake")
+    }
+
+})
+
 function didSelfHit() {
     for (let i = 0; i < snakeTail.length; i++) {
         if (currentSnakeIndex == snakeTail[i]) {
-            clearInterval(snakeId)
-            lose.textContent = "GAME OVER"
-            isDisabled = true;
+            gameOver(score);
         }
 
     }
@@ -150,14 +183,16 @@ function moveSnake(direction) {
         }
 
     } else {
-        clearInterval(snakeId)
-        lose.textContent = "GAME OVER"
-        isDisabled = true;
+        gameOver(score);
+        
+
     }
 
 
 
 }
+
+
 
 //when eat occurs, do not remove classlist snake from last index in snake
 //check eat because I am always removing the previous piece
